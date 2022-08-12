@@ -5,6 +5,7 @@
     using Azure.Messaging.EventHubs.Producer;
     using Confluent.Kafka;
     using Microsoft.Azure.Devices.Client;
+    using Microsoft.Azure.Devices.Client.Transport.Mqtt;
 
     public class DefaultDeviceSimulatorFactory : IDeviceSimulatorFactory
     {
@@ -39,6 +40,7 @@
 
         private static ISender GetIotHubSender(string deviceId, RunnerConfiguration config)
         {
+            var t = new MqttTransportSettings(Microsoft.Azure.Devices.Client.TransportType.Mqtt_Tcp_Only);
             // create one deviceClient for each device
             var deviceClient = DeviceClient.CreateFromConnectionString(
                 config.IotHubConnectionString,
@@ -54,6 +56,12 @@
                     }
                 });
 
+//            new ITransportSettings[]
+//{
+//                    new MqttTransportSettings(Microsoft.Azure.Devices.Client.TransportType.Mqtt_Tcp_Only)
+//});
+
+            //deviceClient.
             return new IotHubSender(deviceClient, deviceId, config);
         }
 
